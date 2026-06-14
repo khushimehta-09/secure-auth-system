@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-6"><div class="card auth-card shadow-sm"><div class="card-body p-4 p-lg-5"><h2 class="fw-bold mb-1">{{ title }}</h2><p class="text-muted mb-4">Create a secure {{ role }} account.</p><form method="post">{% csrf_token %}{% include 'accounts/partials_form.html' %}<button class="btn btn-primary w-100 py-2">Create Account</button></form></div></div></div></div>
+{% endblock %}

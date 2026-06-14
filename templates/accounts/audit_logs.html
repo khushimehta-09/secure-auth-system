@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Audit Logs{% endblock %}
+{% block content %}
+<div class="dashboard-header mb-4"><div><h1 class="fw-bold">Audit Logs</h1><p class="text-muted mb-0">Important profile, password, approval and support actions.</p></div><a href="{% url 'login_activity' %}" class="btn btn-outline-primary">Login Activity</a></div>
+<div class="card app-card shadow-sm"><div class="card-body"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Action</th><th>Actor</th><th>Target</th><th>Description</th><th>Date</th></tr></thead><tbody>{% for l in logs %}<tr><td><strong>{{ l.action }}</strong></td><td>{{ l.actor.email|default:'System/Public' }}</td><td>{{ l.target.email|default:'-' }}</td><td>{{ l.description }}</td><td>{{ l.created_at|date:'M d, Y H:i' }}</td></tr>{% empty %}<tr><td colspan="5" class="text-muted">No audit logs yet.</td></tr>{% endfor %}</tbody></table></div></div></div>
+{% endblock %}

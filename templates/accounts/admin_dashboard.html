@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard-header mb-4"><div><h1 class="fw-bold mb-1">Admin Dashboard</h1><p class="text-muted mb-0">Welcome, {{ user.full_name }}. Manage distributors, security and support.</p></div><a class="btn btn-primary" href="{% url 'create_distributor' %}"><i class="bi bi-plus-lg"></i> Add Distributor</a></div>
+<div class="row g-3 mb-4">
+    <div class="col-md-4 col-xl-2"><div class="stat-card"><i class="bi bi-people"></i><span>{{ total_distributors }}</span><p>Total</p></div></div>
+    <div class="col-md-4 col-xl-2"><div class="stat-card warning"><i class="bi bi-hourglass-split"></i><span>{{ pending_distributors }}</span><p>Pending</p></div></div>
+    <div class="col-md-4 col-xl-2"><div class="stat-card success"><i class="bi bi-check-circle"></i><span>{{ approved_distributors }}</span><p>Approved</p></div></div>
+    <div class="col-md-4 col-xl-2"><div class="stat-card danger"><i class="bi bi-slash-circle"></i><span>{{ blocked_distributors }}</span><p>Blocked</p></div></div>
+    <div class="col-md-4 col-xl-2"><div class="stat-card danger"><i class="bi bi-shield-exclamation"></i><span>{{ failed_logins }}</span><p>Failed Logins</p></div></div>
+    <div class="col-md-4 col-xl-2"><div class="stat-card"><i class="bi bi-ticket-detailed"></i><span>{{ open_tickets }}</span><p>Open Tickets</p></div></div>
+</div>
+<div class="row g-4"><div class="col-lg-7"><div class="card app-card shadow-sm"><div class="card-body"><div class="d-flex justify-content-between align-items-center mb-3"><h5 class="fw-bold mb-0">Recent Login Activity</h5><a href="{% url 'login_activity' %}">View all</a></div><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Email</th><th>Status</th><th>IP</th><th>Date</th></tr></thead><tbody>{% for a in recent_logins %}<tr><td>{{ a.email }}</td><td><span class="badge text-bg-{% if a.status == 'SUCCESS' %}success{% elif a.status == 'LOCKED' %}danger{% else %}warning{% endif %}">{{ a.get_status_display }}</span></td><td>{{ a.ip_address|default:'-' }}</td><td>{{ a.created_at|date:'M d, Y H:i' }}</td></tr>{% empty %}<tr><td colspan="4" class="text-muted">No login activity yet.</td></tr>{% endfor %}</tbody></table></div></div></div></div><div class="col-lg-5"><div class="card app-card shadow-sm"><div class="card-body"><div class="d-flex justify-content-between align-items-center mb-3"><h5 class="fw-bold mb-0">Recent Tickets</h5><a href="{% url 'support_tickets' %}">View all</a></div>{% for ticket in recent_tickets %}<a class="ticket-row" href="{% url 'support_ticket_detail' ticket.id %}"><strong>{{ ticket.subject }}</strong><span>{{ ticket.distributor.full_name }} • {{ ticket.get_status_display }}</span></a>{% empty %}<p class="text-muted">No tickets yet.</p>{% endfor %}</div></div></div></div>
+{% endblock %}
